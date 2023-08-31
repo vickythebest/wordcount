@@ -54,8 +54,8 @@ public class StreamsStarterApp
 
         KafkaStreams streams=new KafkaStreams(builder,properties);
         streams.start();
-        //  Print topologies
-        System.out.println(streams.toString());
+        //  Printed topologies
+        System.out.println("Printed topologies: "+streams.toString());
 
 //      Shutdown hook to correctly close the streams application
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));

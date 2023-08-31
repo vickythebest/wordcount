@@ -12,6 +12,11 @@ nohup zookeeper-server-start ~/kafka/confluent-7.4.1/etc/kafka/zookeeper.propert
 
 nohup kafka-server-start ~/kafka/confluent-7.4.1/etc/kafka/server.properties >> broker.log &
 
+**Create two topic 1. input and 2. output for stream **
+
+kafka-topics --bootstrap-server localhost:9092 --partitions 2 --create --topic word-count-input
+kafka-topics --bootstrap-server localhost:9092 --partitions 2 --create --topic word-count-output
+
 **Consumer**
 
 kafka-console-consumer --bootstrap-server localhost:9092 --topic word-count-output --from-beginning --formatter kafka.tools.DefaultMessageFormatter --property print.key=true --property print.value=trye --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
@@ -21,4 +26,27 @@ kafka-console-producer --bootstrap-server localhost:9092 --topic word-count-inpu
 
 You can type the sentence in upper case. SteamStarterApp convert the message in lower case 
 and perform the process of collecting and summarize data to gain insights 
+
+**Fat Jar**  Packaging the Wordcount application as fat jar
+    1. Modify plugin block in pom.xml add new plugin which contain manifest section along with main class path
+    2. Go to command line and run mvn clean package or you can use editor (eclipse/intelji) to make package
+    3. Once package is ready please run below command from terminal 
+        java -jar .\target\wordcount-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+**Log Compactions**
+properties 
+    --config cleanup.policy=compact (new topic will be compacted topice)
+    --config min.cleanable.dirty.ration=0.005 (**Default is 0.5**)
+    --config segment.ms=10000 (**every 10 sec kafka will allow new segement** )
+
+create topic with log compactions parameters
+kafka-topics --bootstrap-server localhost:9092 --create
+--topic employee-salary-compact
+--partitions 1 
+--replication-factor 1
+--config cleanup.policy=compact
+--config min.cleanable.dirty.ration=0.005 (Default is 0.5)
+--config segment.ms=10000
+
+
 
