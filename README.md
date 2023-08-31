@@ -34,23 +34,23 @@ properties
     --config segment.ms=10000 (**every 10 sec kafka will allow new segement** )
 
 **create topic with log compactions parameters**  
-kafka-topics --bootstrap-server localhost:9092 --create
---topic employee-salary-compact
---partitions 1 
---replication-factor 1
---config cleanup.policy=compact
---config min.cleanable.dirty.ration=0.005 (Default is 0.5)
+kafka-topics --bootstrap-server localhost:9092 \
+--create --topic employee-salary-compact \
+--partitions 1  \
+--replication-factor 1 \
+--config cleanup.policy=compact \
+--config min.cleanable.dirty.ratio=0.005 \
 --config segment.ms=10000
 
 **Print data on log/console from consumer**  
-kafka-console-consumer --bootstrap-server localhost:9092
---topic employee-salary-compact
---from-beginning
---property print.key=true
+kafka-console-consumer --bootstrap-server localhost:9092 \
+--topic employee-salary-compact \
+--from-beginning \
+--property print.key=true \
 --property key.separator=,
 
 **Produce message**  
-kafka-console-producer --broker-list localhost:9092
---topic employee-salary-compact
---property parse.key=true
+kafka-console-producer --broker-list localhost:9092 \
+--topic employee-salary-compact \
+--property parse.key=true \
 --property key.separator=,
