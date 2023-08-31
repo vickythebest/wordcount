@@ -49,7 +49,7 @@ kafka-console-consumer --bootstrap-server localhost:9092
 --property print.key=true
 --property key.separator=,
 
-**Produce message**
+**Produce message**  
 kafka-console-producer --broker-list localhost:9092
 --topic employee-salary-compact
 --property parse.key=true
