@@ -42,6 +42,9 @@ kafka-topics --bootstrap-server localhost:9092 \
 --config min.cleanable.dirty.ratio=0.005 \
 --config segment.ms=10000
 
+**Alter topic change retention time**
+kafka-configs.sh --bootstrap-server localhost:9092 --entity-type topics --entity-name favourite-color-input --alter-config retention.ms=360000
+
 **Print data on log/console from consumer**  
 kafka-console-consumer --bootstrap-server localhost:9092 \
 --topic employee-salary-compact \
