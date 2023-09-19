@@ -22,13 +22,13 @@ public class StreamsStarterApp
 
         StreamsBuilder streamsBuilder = new StreamsBuilder();
 //        1. Stream
-        KStream<String, String> wordCountInput = streamsBuilder.stream("word-count-input");
+        KStream<String, String> wordCountInput = streamsBuilder.stream("wordcount-stream-input");
 
         wordCountInput.print(Printed.toSysOut());
 
         var wordCounts = wordCountInput
 //        2. Map the key & value in lowercase
-                .mapValues(textLine -> textLine.toLowerCase())
+                .mapValues(textLine -> textLine.toUpperCase())
 //        3. FlatMapValue to split the message by space
                 .flatMapValues(textLine -> Arrays.asList(textLine.split("\\W+")))
 //        4. SelectKey change the Key name similar to value
@@ -46,7 +46,7 @@ public class StreamsStarterApp
 //            System.out.println("Key: "+key+ ", Value: "+value);
 //        });
 
-        wordCounts.toStream().to("word-count-outpu", Produced.with(Serdes.String(),Serdes.Long()));
+        wordCounts.toStream().to("wordcount-stream-output", Produced.with(Serdes.String(),Serdes.Long()));
 
         return streamsBuilder.build();
 
@@ -56,8 +56,8 @@ public class StreamsStarterApp
         System.out.println( "Hello Kafka Stream!" );
 
         Properties properties = new Properties();
-        properties.put(StreamsConfig.APPLICATION_ID_CONFIG,"wordcount-application");
-        properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,"192.168.144.101:9092");
+        properties.put(StreamsConfig.APPLICATION_ID_CONFIG,"wordcount-stream-application");
+        properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,"192.168.55.11:9092");
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
         properties.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         properties.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG,Serdes.String().getClass());
